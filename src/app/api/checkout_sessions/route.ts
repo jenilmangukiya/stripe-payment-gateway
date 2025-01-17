@@ -17,11 +17,12 @@ export async function POST(request: Request) {
               name: "product.name", // Product name from your database
               description: "product.description", // Optional: Description
             },
-            unit_amount: 1000 * 100, // Stripe requires the price in cents
+            unit_amount: 10 * 100, // Stripe requires the price in cents
           },
-          quantity: 2,
+          quantity: 1,
         },
       ],
+
       mode: "payment",
       return_url: `${request.headers.get(
         "origin"
@@ -43,7 +44,6 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const sessionId = url.searchParams.get("session_id");
     const session = await stripe.checkout.sessions.retrieve(sessionId!);
-    console.log("session", session);
     return Response.json({
       status: session.status,
       customer_email: session.customer_details?.email,
